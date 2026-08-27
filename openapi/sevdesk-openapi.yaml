@@ -42,6 +42,16 @@ tags:
       invoice, a voucher or a credit note, until the relevant object is
       completely paid.
     x-displayName: CheckAccountTransaction
+  - name: PrivateTransactionRule
+    description: >-
+      A private transaction rule can be used to automatically set transactions
+      to private after importing.<br> <br> Every rule can define a
+      paymentPurpose and/or counterpartName to match. At least one of these must
+      be set.<br> <br> Matching is case sensitive, a simple string match. The
+      properties that are set must match the transaction properties to have an
+      effect.<br> Example: A rule with counterpartName=Schmid will match
+      transactions from 'Anne Schmid' and 'Hans Schmidt' but not 'X SCHMID'.
+    x-displayName: PrivateTransactionRule
   - name: AccountingContact
     description: >-
       A accounting contact object belongs to one specific contact object and
@@ -108,7 +118,7 @@ tags:
       # The credit note number
        At this point we wan't to pay special attention to the credit note number again.<br> The credit note number is not an attribute that must be supplied when creating a credit note, however for most, if not all of our customers, a correct enumeration is the key to structured bookkeeping, which is why duplicate entries must be avoided.<br> For this reason, most of the time a manual assignment of numbers is not the best idea and we are happy to provide you a endpoints which will help out finding the next credit note number. <br><br> This GET request will check what the next credit note number should be, so that a correct enumeration is kept.<br> The concrete endpoint can be used for a multitude of enumerations, but we will just concentrate on checking the next credit note number.<br> <ul> <li><b>v1/SevSequence/Factory/getByType?objectType=CreditNote&type=CN</b></li> </ul> 
       # How to filter for certain credit notes
-       Often you don't want to retrieve all credit notes in a sevdesk account or one specific credit note of which you know the ID, but rather a list of credit notes or a single credit note with certain properties.<br> For this purpose we provide a bunch of filters that you can attach to your GET query string for nearly all endpoints.<br> Here are all filters applicable to a credit note query. <table> <tr> <th>Filter</th> <th>Description</th> </tr> <tr> <td>creditNoteNumber={number}</td> <td>Only retrieve all credit notes with number as a credit note number</td> </tr> <tr> <td>onlyEnshrined=true</td> <td>Only retrieve all credit notes which are enshrined</td> </tr> <tr> <td>tags[x][id]={id}&tags[x][objectName]=Tag</td> <td>Only retrieve all credit notes with id as a tag.<br> You can specify multiple tags by adding more array entries. </td> </tr> <tr> <td>status={status}</td> <td>Only retrieve credit notes of a given status</td> </tr> <tr> <td>delinquent=true</td> <td>Only retrieve delinquent (due) credit notes</td> </tr> <tr> <td>notdelinquent=true</td> <td>Only retrieve credit notes which are not delinquent (due)</td> </tr> <tr> <td>customerIntenalNote={note}</td> <td>Only retrieve all credit notes with note as a customer internal note</td> </tr> <tr> <td>origin[id]={id}&origin[objectName]=ModelName</td> <td>Only retrieve all credit notes with id as an origin</td> </tr> <tr> <td>costCentre[id]={id}&costCentre[objectName]=CostCentre</td> <td>Only retrieve all credit notes with id as a cost centre.<br> </td> </tr> <tr> <td>contact[id]={id}&contact[objectName]=Contact</td> <td>Only retrieve all credit notes with id as a contact<br> </td> </tr> <tr> <td>startDate={timestamp}</td> <td>Only retrieve all credit notes where credit note date is bigger than timestamp</td> </tr> <tr> <td>endDate={timestamp}</td> <td> Only retrieve all credit notes where credit note date is smaller than timestamp<br> If startDate and endDate are both supplied, you will get all credit notes in the defined range </td> </tr> <tr> <td>day={timestamp}</td> <td>Only retrieve all credit notes where credit note date falls on the day of timestamp</td> </tr> <tr> <td>header={header}</td> <td>Only retrieve all credit notes with header as a header</td> </tr> <tr> <td>headerSearch={header}</td> <td>Only retrieve all credit notes of which the header is like header</td> </tr> <tr> <td>paymentMethod[id]={id}&paymentMethod[objectName]=PaymentMethod</td> <td>Only retrieve all credit notes with id as a payment method</td> </tr> <tr> <td>headerOrNumber={headerOrNumber}</td> <td>Only retrieve all credit notes of which the header or credit note number is like headerOrNumber</td> </tr> <tr> <td>headerStartsWith={headerStart}</td> <td>Only retrieve all credit notes of which the header starts with headerStart</td> </tr> <tr> <td>globalSearch={searchTerm}</td> <td>Search for credit notes related to searchTerm</td> </tr> <tr> <td>orderByCreditNoteNumber={ASC/DESC}</td> <td>Order all credit notes after credit note number in ASC/DESC order</td> </tr> <tr> <td>partiallyPaid=true</td> <td> Retrieve all credit notes which are partially paid </td> </tr> <tr> <td>orderByDueDate=true</td> <td>Retrieve all credit notes ordered by their due date</td> </tr> <tr> <td>orderByDueTime=true</td> <td>Retrieve all credit notes ordered by their due time</td> </tr> <tr> <td>orderByDebit=true</td> <td>Retrieve all credit notes ordered by their debit</td> </tr> <tr> <td>creditNoteNumberGreater={number}</td> <td>Only retrieve all credit notes of which the credit note number is bigger than number</td> </tr> <tr> <td>creditNoteNumberNumberSmaller={number}</td> <td>Only retrieve all credit notes of which the credit note number is smaller than number</td> </tr> <tr> <td>startAmount={amount}</td> <td>Only retrieve all credit notes of which the (net/gross) sum is larger or equal amount</td> </tr> <tr> <td>endAmount={amount}</td> <td>Only retrieve all credit notes of which the (net/gross) sum is smaller or equal amount</td> </tr> </table>
+       Often you don't want to retrieve all credit notes in a sevdesk account or one specific credit note of which you know the ID, but rather a list of credit notes or a single credit note with certain properties.<br> For this purpose we provide a bunch of filters that you can attach to your GET query string for nearly all endpoints.<br> Here are all filters applicable to a credit note query. <table> <tr> <th>Filter</th> <th>Description</th> </tr> <tr> <td>creditNoteNumber={number}</td> <td>Only retrieve all credit notes with number as a credit note number</td> </tr> <tr> <td>onlyEnshrined=true</td> <td>Only retrieve all credit notes which are enshrined</td> </tr> <tr> <td>tags[x][id]={id}&tags[x][objectName]=Tag</td> <td>Only retrieve all credit notes with id as a tag.<br> You can specify multiple tags by adding more array entries. </td> </tr> <tr> <td>status={status}</td> <td>Only retrieve credit notes of a given status</td> </tr> <tr> <td>delinquent=true</td> <td>Only retrieve delinquent (due) credit notes</td> </tr> <tr> <td>notdelinquent=true</td> <td>Only retrieve credit notes which are not delinquent (due)</td> </tr> <tr> <td>customerIntenalNote={note}</td> <td>Only retrieve all credit notes with note as a customer internal note</td> </tr> <tr> <td>origin[id]={id}&origin[objectName]=ModelName</td> <td>Only retrieve all credit notes with id as an origin</td> </tr> <tr> <td>costCentre[id]={id}&costCentre[objectName]=CostCentre</td> <td>Only retrieve all credit notes with id as a cost centre.<br> </td> </tr> <tr> <td>contact[id]={id}&contact[objectName]=Contact</td> <td>Only retrieve all credit notes with id as a contact<br> </td> </tr> <tr> <td>startDate={timestamp}</td> <td>Only retrieve all credit notes where credit note date is bigger than timestamp</td> </tr> <tr> <td>endDate={timestamp}</td> <td> Only retrieve all credit notes where credit note date is smaller than timestamp<br> If startDate and endDate are both supplied, you will get all credit notes in the defined range </td> </tr> <tr> <td>day={timestamp}</td> <td>Only retrieve all credit notes where credit note date falls on the day of timestamp</td> </tr> <tr> <td>paymentMethod[id]={id}&paymentMethod[objectName]=PaymentMethod</td> <td>Only retrieve all credit notes with id as a payment method</td> </tr> <tr> <td>headerOrNumber={headerOrNumber}</td> <td>Only retrieve all credit notes of which the header or credit note number is like headerOrNumber</td> </tr> <tr> <td>headerStartsWith={headerStart}</td> <td>Only retrieve all credit notes of which the header starts with headerStart</td> </tr> <tr> <td>orderByCreditNoteNumber={ASC/DESC}</td> <td>Order all credit notes after credit note number in ASC/DESC order</td> </tr> <tr> <td>partiallyPaid=true</td> <td> Retrieve all credit notes which are partially paid </td> </tr> <tr> <td>orderByDueDate=true</td> <td>Retrieve all credit notes ordered by their due date</td> </tr> <tr> <td>orderByDueTime=true</td> <td>Retrieve all credit notes ordered by their due time</td> </tr> <tr> <td>orderByDebit=true</td> <td>Retrieve all credit notes ordered by their debit</td> </tr> <tr> <td>creditNoteNumberGreater={number}</td> <td>Only retrieve all credit notes of which the credit note number is bigger than number</td> </tr> <tr> <td>creditNoteNumberNumberSmaller={number}</td> <td>Only retrieve all credit notes of which the credit note number is smaller than number</td> </tr> <tr> <td>startAmount={amount}</td> <td>Only retrieve all credit notes of which the (net/gross) sum is larger or equal amount</td> </tr> <tr> <td>endAmount={amount}</td> <td>Only retrieve all credit notes of which the (net/gross) sum is smaller or equal amount</td> </tr> </table>
     x-displayName: CreditNote
   - name: CreditNotePos
     description: >-
@@ -158,12 +168,12 @@ tags:
        Invoice types <br> Invoices are most certainly the most complex objects that can be handled over the API. There are multiple types of invoices and these invoices can have multiple status again. Let's have a look at the different types of invoices first.<br> <table> <tr> <th>Invoice Type</th> <th>Description</th> <th>Abbreviation</th> </tr> <tr> <td>Normal invoice</td> <td> A normal invoice which documents a simple selling process. </td> <td> RE </td> </tr> <tr> <td>Recurring invoice</td> <td> An invoice which generates normal invoices with the same values regularly in fixed time frames (every month, year, ...). </td> <td> WKR </td> </tr> <tr> <td>Cancellation invoice</td> <td> An invoice which cancels another already created normal invoice. </td> <td> SR </td> </tr> <tr> <td>Reminder invoice</td> <td> An invoice which gets created if the end-customer failed to pay a normal invoice in a given time frame.<br> Often includes some kind of reminder fee. </td> <td> MA </td> </tr> <tr> <td>Partial invoice</td> <td> Used when partial services have already been provided. One or more partial invoices result in a final invoice. </td> <td> TR </td> </tr> <tr> <td>Advance invoice</td> <td> Used when no service has been provided yet. One or more advance invoices result in a final invoice. </td> <td> AR </td> </tr> <tr> <td>Final invoice</td> <td> The final invoice includes all partial / advance invoices.<br> After the final invoice is paid by the end-customer, the selling process is complete. </td> <td> ER </td> </tr> </table><br> For now we will only cover the normal invoices, as this is complex enough.<br> However, it is important to keep in mind the abbreviations for all types of invoices or at least the one you will need.<br> This is, because you will need to provide the invoice type when creating an invoice.<br> <br> <b>Invoice status</b><br> Now that we have covered all invoice types, let's move to the different status they can have.<br> <table> <tr> <th>Invoice status</th> <th>Meaning</th> <th>Status code</th> </tr> <tr> <td>Deactivated recurring invoice</td> <td> The invoice is a deactivated recurring invoice.<br> This status code is only relevant for recurring invoices. </td> <td> 50 </td> </tr> <tr> <td>Draft</td> <td> The invoice is still a draft.<br> It has not been sent to the end-customer and can still be changed. </td> <td> 100 </td> </tr> <tr> <td>Open / Due</td> <td> The invoice has been sent to the end-customer.<br> It is either shown as <b>open</b> if the pay date is not exceeded or <b>due</b> if it is. </td> <td> 200 </td> </tr> <tr> <td>Partially paid</td> <td> The invoice has been partially paid.<br> This means, that it is linked to a transaction on some payment account in sevdesk. This status was introduced with Release 4.181 (June 13, 2024). Invoices that were partially paid before that release will have the status "Open" (<code>"status": "200"</code>). In that case use [Invoice/{invoiceId}/getIsPartiallyPaid](#tag/Invoice/operation/getIsInvoicePartiallyPaid) instead of checking the status directly. </td> <td> 750 </td> </tr> <tr> <td>Paid</td> <td> The invoice has been paid.<br> This means, that it is linked to a transaction on some payment account in sevdesk. </td> <td> 1000 </td> </tr> </table><br> It is again important to keep in mind the status codes for all status of invoices or at least the one you will need.<br> This is, because you will need to provide the status code when creating an invoice.<br> 
 
       # How e-invoice works
-       The e-invoice is a new feature in sevdesk, which allows you to send invoices to your customers in a digital way. To turn an invoice into an e-invoice, you have to set <code>propertyIsEInvoice</code> to <code>true</code> When <code>propertyIsEInvoice</code> is set an XML is embedded inside the PDF. Embedding the XML into the PDF is called ZUGFeRD. If you just need the XML (XRechnung) you can get it by calling [Invoice/{invoiceId}/getXml](#tag/Invoice/operation/invoiceGetXml). Both XML files are identical. 
+       The e-invoice is a new feature in sevdesk, which allows you to send invoices to your customers in a digital way. To turn an invoice into an e-invoice, you have to set <code>propertyIsEInvoice</code> to <code>true</code> When <code>propertyIsEInvoice</code> is set an XML is embedded inside the PDF. Embedding the XML into the PDF is called ZUGFeRD. If you just need the XML (XRechnung) you can get it by calling [Invoice/{invoiceId}/getXml](#tag/Invoice/operation/invoiceGetXml). Both XML files are identical.
 
        # How to book an invoice
        Booking the invoice with a transaction is probably the most important part in the bookkeeping process.<br> There are several ways on correctly booking an invoice, all by using the same endpoint.<br> This endpoint is called <b>/Invoice/{id}/bookAmount</b>.<br><br> The first way of correctly booking an invoice is to book it on the standard check account which is provided by sevdesk.<br> This is perhaps the easiest way, as no transaction needs to be manually created or searched.<br> The fitting transaction will automatically be created on the standard account and the invoice will be booked with it.<br> This works the same way with the register check account.<br><br> <img src='openAPI/img/bookAmountStandard.PNG' width= '800px'><br><br> In the second variant, it is necessary that a transaction already exists, because it is not automatically generated in a manual account or online/finapi account.<br> For this, you must either create the transactions or, in the case of an online/finapi account, import the transactions. When booking the invoices it is important that an id and an objectName are passed along, otherwise a logic error will occur.<br> <img src='openAPI/img/bookAmountWithTransaction.PNG' width= '800px'><br><br> 
       # How to filter for certain invoices
-       Often you don't want to retrieve all invoices in a sevdesk account or one specific invoice of which you know the ID, but rather a list of invoices or a single invoice with certain properties.<br> For this purpose we provide a bunch of filters that you can attach to your GET query string for nearly all endpoints.<br> Here are all filters applicable to an invoice query.<br> <table> <tr> <th>Filter</th> <th>Description</th> </tr> <tr> <td>partiallyPaid=true</td> <td> Retrieve all invoices which are partially paid </td> </tr> <tr> <td>orderByDebit=true</td> <td>Retrieve all invoices ordered by their debit</td> </tr> <tr> <td>orderByDueTime=true</td> <td>Retrieve all invoices ordered by their due time</td> </tr> <tr> <td>showAll=true</td> <td>Retrieve all invoices of all types</td> </tr> <tr> <td>invoiceNumber={number}</td> <td>Only retrieve all invoices with number as a invoice number</td> </tr> <tr> <td>delinquent=true</td> <td>Only retrieve delinquent (due) invoices</td> </tr> <tr> <td>notdelinquent=true</td> <td>Only retrieve invoices which are not delinquent (due)</td> </tr> <tr> <td>tags[x][id]={id}&tags[x][objectName]=Tag</td> <td>Only retrieve all invoices with id as a tag.<br> You can specify multiple tags by adding more array entries. </td> </tr> <tr> <td>costCentre[id]={id}&costCentre[objectName]=CostCentre</td> <td>Only retrieve all invoices with id as a cost centre.<br> </td> </tr> <tr> <td>status={status}</td> <td>Only retrieve invoices of a given status</td> </tr> <tr> <td>createBefore={timestamp}</td> <td>Only retrieve all invoices created before timestamp</td> </tr> <tr> <td>createAfter={timestamp}</td> <td>Only retrieve all invoices created after timestamp</td> </tr> <tr> <td>updateBefore={timestamp}</td> <td>Only retrieve all invoices updated last before timestamp</td> </tr> <tr> <td>updateAfter={timestamp}</td> <td>Only retrieve all invoices updated last after timestamp</td> </tr> <tr> <td>contact[id]={id}&contact[objectName]=Contact</td> <td>Only retrieve all invoices with id as a contact<br> </td> </tr> <tr> <td>orderByDueDate=true</td> <td>Retrieve all invoices ordered by their due date</td> </tr> <tr> <td>customerIntenalNote={note}</td> <td>Only retrieve all invoices with note as a customer internal note</td> </tr> <tr> <td>day={timestamp}</td> <td>Only retrieve all invoices where invoice date falls on the day of timestamp</td> </tr> <tr> <td>startDate={timestamp}</td> <td>Only retrieve all invoices where invoice date is bigger than timestamp</td> </tr> <tr> <td>endDate={timestamp}</td> <td> Only retrieve all invoices where invoice date is smaller than timestamp<br> If startDate and endDate are both supplied, you will get all invoices in the defined range </td> </tr> <tr> <td>header={header}</td> <td>Only retrieve all invoices with header as a header</td> </tr> <tr> <td>onlyDunned=true</td> <td>Retrieve all invoices which are dunned</td> </tr> <tr> <td>showWkr=all</td> <td>Retrieve all recurring invoices</td> </tr> <tr> <td>showMa=all</td> <td>Retrieve all invoices which are payment reminders</td> </tr> <tr> <td>origin[id]={id}&origin[objectName]=ModelName</td> <td>Only retrieve all invoices with id as an origin</td> </tr> <tr> <td>invoiceType={type}</td> <td>Only retrieve all invoices with type as an invoice type</td> </tr> <tr> <td>paymentMethod[id]={id}&paymentMethod[objectName]=PaymentMethod</td> <td>Only retrieve all invoices with id as a payment method</td> </tr> <tr> <td>headerSearch={header}</td> <td>Only retrieve all invoices of which the header is like header</td> </tr> <tr> <td>headerStartsWith={headerStart}</td> <td>Only retrieve all invoices of which the header starts with headerStart</td> </tr> <tr> <td>headerOrNumber={headerOrNumber}</td> <td>Only retrieve all invoices of which the header or invoice number is like headerOrNumber</td> </tr> <tr> <td>globalSearch={searchTerm}</td> <td>Search for invoices related to searchTerm</td> </tr> <tr> <td>orderByInvoiceNumber={ASC/DESC}</td> <td>Order all invoices after invoice number in ASC/DESC order</td> </tr> <tr> <td>invoiceNumberGreater={number}</td> <td>Only retrieve all invoices of which the invoice number is bigger than number</td> </tr> <tr> <td>invoiceNumberSmaller={number}</td> <td>Only retrieve all invoices of which the invoice number is smaller than number</td> </tr> <tr> <td>sendType={type}</td> <td>Only retrieve all invoices with type as a send type</td> </tr> <tr> <td>fulltextSearch={text}</td> <td>Search for invoices, positions or contact with text as a text</td> </tr> </table>
+       Often you don't want to retrieve all invoices in a sevdesk account or one specific invoice of which you know the ID, but rather a list of invoices or a single invoice with certain properties.<br> For this purpose we provide a bunch of filters that you can attach to your GET query string for nearly all endpoints.<br> Here are all filters applicable to an invoice query.<br> <table> <tr> <th>Filter</th> <th>Description</th> </tr> <tr> <td>partiallyPaid=true</td> <td> Retrieve all invoices which are partially paid </td> </tr> <tr> <td>orderByDebit=true</td> <td>Retrieve all invoices ordered by their debit</td> </tr> <tr> <td>orderByDueTime=true</td> <td>Retrieve all invoices ordered by their due time</td> </tr> <tr> <td>showAll=true</td> <td>Retrieve all invoices of all types</td> </tr> <tr> <td>invoiceNumber={number}</td> <td>Only retrieve all invoices with number as a invoice number</td> </tr> <tr> <td>delinquent=true</td> <td>Only retrieve delinquent (due) invoices</td> </tr> <tr> <td>notdelinquent=true</td> <td>Only retrieve invoices which are not delinquent (due)</td> </tr> <tr> <td>tags[x][id]={id}&tags[x][objectName]=Tag</td> <td>Only retrieve all invoices with id as a tag.<br> You can specify multiple tags by adding more array entries. </td> </tr> <tr> <td>costCentre[id]={id}&costCentre[objectName]=CostCentre</td> <td>Only retrieve all invoices with id as a cost centre.<br> </td> </tr> <tr> <td>status={status}</td> <td>Only retrieve invoices of a given status</td> </tr> <tr> <td>createBefore={timestamp}</td> <td>Only retrieve all invoices created before timestamp</td> </tr> <tr> <td>createAfter={timestamp}</td> <td>Only retrieve all invoices created after timestamp</td> </tr> <tr> <td>updateBefore={timestamp}</td> <td>Only retrieve all invoices updated last before timestamp</td> </tr> <tr> <td>updateAfter={timestamp}</td> <td>Only retrieve all invoices updated last after timestamp</td> </tr> <tr> <td>contact[id]={id}&contact[objectName]=Contact</td> <td>Only retrieve all invoices with id as a contact<br> </td> </tr> <tr> <td>orderByDueDate=true</td> <td>Retrieve all invoices ordered by their due date</td> </tr> <tr> <td>customerIntenalNote={note}</td> <td>Only retrieve all invoices with note as a customer internal note</td> </tr> <tr> <td>day={timestamp}</td> <td>Only retrieve all invoices where invoice date falls on the day of timestamp</td> </tr> <tr> <td>startDate={timestamp}</td> <td>Only retrieve all invoices where invoice date is bigger than timestamp</td> </tr> <tr> <td>endDate={timestamp}</td> <td> Only retrieve all invoices where invoice date is smaller than timestamp<br> If startDate and endDate are both supplied, you will get all invoices in the defined range </td> </tr> <tr> <td>onlyDunned=true</td> <td>Retrieve all invoices which are dunned</td> </tr> <tr> <td>showWkr=all</td> <td>Retrieve all recurring invoices</td> </tr> <tr> <td>showMa=all</td> <td>Retrieve all invoices which are payment reminders</td> </tr> <tr> <td>origin[id]={id}&origin[objectName]=ModelName</td> <td>Only retrieve all invoices with id as an origin</td> </tr> <tr> <td>invoiceType={type}</td> <td>Only retrieve all invoices with type as an invoice type</td> </tr> <tr> <td>paymentMethod[id]={id}&paymentMethod[objectName]=PaymentMethod</td> <td>Only retrieve all invoices with id as a payment method</td> </tr> <tr> <td>headerStartsWith={headerStart}</td> <td>Only retrieve all invoices of which the header starts with headerStart</td> </tr> <tr> <td>headerOrNumber={headerOrNumber}</td> <td>Only retrieve all invoices of which the header or invoice number is like headerOrNumber</td> </tr> <tr> <td>orderByInvoiceNumber={ASC/DESC}</td> <td>Order all invoices after invoice number in ASC/DESC order</td> </tr> <tr> <td>invoiceNumberGreater={number}</td> <td>Only retrieve all invoices of which the invoice number is bigger than number</td> </tr> <tr> <td>invoiceNumberSmaller={number}</td> <td>Only retrieve all invoices of which the invoice number is smaller than number</td> </tr> <tr> <td>sendType={type}</td> <td>Only retrieve all invoices with type as a send type</td> </tr> <tr> <td>fulltextSearch={text}</td> <td>Search for invoices, positions or contact with text as a text</td> </tr> </table>
     x-displayName: Invoice
   - name: InvoicePos
     description: |-
@@ -193,7 +203,7 @@ tags:
       # Attributes of an order
        Here is the table of all attributes of orders.<br> Necessary attributes, which must not be left out, are marked red.<br> Attributes which are strongly recommended for valid bookkeeping are marked orange.<br> <table> <tr> <th>Attribute</th> <th>Description</th> <th>Attribute Type</th> </tr> <tr> <td><span style='color:red'>taxType</span></td> <td> <b>Use this in sevdesk-Update 1.0 (instead of taxRule).</b><br> Defines the vat-regulation.<br> Can be: <ul> <li><code>default</code></li> <li><code>eu</code></li> <li><code>noteu</code></li> <li><code>custom</code></li> <li><code>ss</code></li> </ul> </td> <td>String</td> </tr> <tr> <td>taxSet</td> <td> <b>Use this in sevdesk-Update 1.0 (instead of taxRule).</b><br> Use for custom defined vat-regulations.<br> Requires <code>"taxType": "custom"</code> </td> <td>Integer</td> </tr> <tr> <td><span style='color:red'>taxRule</span></td> <td> <b>Use this in sevdesk-Update 2.0 (replaces taxType / taxSet).</b><br> See <a href="#section/sevdesk-Update-2.0/Tax-Rules">list of available VAT rules</a><br> <br> Example for Umsatzsteuerpflichtige Umsätze: <code>"taxRule": {"id": "1", "objectName": "TaxRule"}</code> </td> <td>Nested object (TaxRule)</td> </tr> <tr> <td><span style='color:red'>currency</span></td> <td> Currency of the order.<br> Needs to be currency code according to ISO-4217. </td> <td>String</td> </tr> <tr> <td><span style='color:red'>version</span></td> <td> Version of the order.<br> Can be used if you have multiple drafts for the same order.<br> Should start with 0. </td> <td>Integer</td> </tr> <tr> <td><span style='color:red'>taxText</span></td> <td> Text describing the vat regulation you chose.<br> A common text of our German customers would be:<br> Umsatzsteuer ausweisen or zzgl. Umsatzsteuer 19% </td> <td>String</td> </tr> <tr> <td>taxRate</td> <td> This is not used anymore. Use the taxRate of the individual positions instead. </td> <td>Integer</td> </tr> <tr> <td><span style='color:red'>contactPerson</span></td> <td> The sevdesk user which acts as a contact person for this order.<br> </td> <td>Nested object (SevUser)</td> </tr> <tr> <td>smallSettlement</td> <td> If the sevdesk account is falling under the small entrepreneur scheme the order must't contain any vat.<br> If this is the case, this attribute should be true, otherwise false. </td> <td>Boolean</td> </tr> <tr> <td><span style='color:red'>orderDate</span></td> <td> The order date. </td> <td>Date / Timestamp</td> </tr> <tr> <td><span style='color:red'>status</span></td> <td> The order status. </td> <td>Integer</td> </tr> <tr> <td>showNet</td> <td> This attribute determines, if the price you give the order positions will be regarded as gross or net.<br> If true, the price attribute will hold the net value, otherwise the gross value. </td> <td>Boolean</td> </tr> <tr> <td>customerInternalNote</td> <td> You can use this attribute to provide a note for the order.<br> It can be used for reference numbers, order numbers or other important information. </td> <td>String</td> </tr> <tr> <td><span style='color:darkorange'>address</span></td> <td> Holds the <b>complete</b> address to which the order is directed.<br> You can use line brakes to separate the different address parts. </td> <td>String</td> </tr> <tr> <td><span style='color:darkorange'>sendType</span></td> <td> If you don't plan to send the order over another endpoint like <b>/Order/sendViaEmail</b> or <b>Order/sendBy</b> but instead give it the status "200" directly, you need to specify a send type here.<br> Valid types are: VPR (printed), VPDF (downloaded), VM (mailed), VP (postal). </td> <td>String</td> </tr> <tr> <td>origin</td> <td> You can specify the object from which an order originated.<br> Just provide the ID of this object. </td> <td>Integer</td> </tr> <tr> <td>typeOrigin</td> <td> Specifies the object name of the object from which an order originated.<br> Most likely <b>Order</b> or <b>Invoice</b>. </td> <td>String</td> </tr> <tr> <td><span style='color:red'>orderNumber</span></td> <td> The order number. </td> <td>String</td> </tr> <tr> <td><span style='color:red'>contact</span></td> <td> The end-customer to which the order is directed.<br> </td> <td>Nested object (Contact)</td> </tr> <tr> <td><span style='color:red'>header</span></td> <td> The order header.<br> Usually consists of the order number and a prefix. </td> <td>String</td> </tr> <tr> <td>headText</td> <td> A head text for the order.<br> Can contain certain html tags. </td> <td>String</td> </tr> <tr> <td>footText</td> <td> A foot text for the order.<br> Can contain certain html tags. </td> <td>String</td> </tr> <tr> <td>paymentTerms</td> <td> The payment terms for the order.<br> </td> <td>Integer</td> </tr> <tr> <td>deliveryTerms</td> <td> The delivery terms for the order.<br> </td> <td>Integer</td> </tr> <tr> <td>sendDate</td> <td> The date the order was sent to the end-customer. </td> <td>Timestamp</td> </tr> <tr> <td><span style='color:red'>orderType</span></td> <td> The order type. </td> <td>String</td> </tr> <tr> <td>deliveryAddressCountry</td> <td> <p>Can be used to specify a different country to the order address (<code>addressCountry</code>).<br> This country is used for <a href="#section/sevdesk-Update-2.0/Tax-Rules">One Stop Shop VAT rules</a>.<br> For example, to validate the tax rate of the positions.<br> <br> If not specified, it defaults to the country of the order address.</p> </td> <td>String</td> </tr> </table> 
       # How to filter for certain orders
-       Often you don't want to retrieve all orders in a sevdesk account or one specific order of which you know the ID, but rather a list of orders or a single order with certain properties.<br> For this purpose we provide a bunch of filters that you can attach to your GET query string for nearly all endpoints.<br> Here are all filters applicable to an order query. <table> <tr> <th>Filter</th> <th>Description</th> </tr> <tr> <td>orderNumber={number}</td> <td>Only retrieve all orders with number as a order number</td> </tr> <tr> <td>tags[x][id]={id}&tags[x][objectName]=Tag</td> <td>Only retrieve all orders with id as a tag.<br> You can specify multiple tags by adding more array entries. </td> </tr> <tr> <td>status={status}</td> <td>Only retrieve orders of a given status</td> </tr> <tr> <td>createBefore={timestamp}</td> <td>Only retrieve all orders created before timestamp</td> </tr> <tr> <td>createAfter={timestamp}</td> <td>Only retrieve all orders created after timestamp</td> </tr> <tr> <td>updateBefore={timestamp}</td> <td>Only retrieve all orders updated last before timestamp</td> </tr> <tr> <td>updateAfter={timestamp}</td> <td>Only retrieve all orders updated last after timestamp</td> </tr> <tr> <td>contact[id]={id}&contact[objectName]=Contact</td> <td>Only retrieve all orders with id as a contact<br> </td> </tr> <tr> <td>startDate={timestamp}</td> <td>Only retrieve all orders where order date is bigger than timestamp</td> </tr> <tr> <td>endDate={timestamp}</td> <td> Only retrieve all orders where order date is smaller than timestamp<br> If startDate and endDate are both supplied, you will get all orders in the defined range </td> </tr> <tr> <td>orderType={type}</td> <td>Only retrieve all orders with type as an order type</td> </tr> <tr> <td>headerSearch={header}</td> <td>Only retrieve all orders of which the header is like header</td> </tr> <tr> <td>globalSearch={searchTerm}</td> <td>Search for orders related to searchTerm</td> </tr> <tr> <td>orderByOrderNumber={ASC/DESC}</td> <td>Order all orders after order number in ASC/DESC order</td> </tr> <tr> <td>orderNumberGreater={number}</td> <td>Only retrieve all orders of which the order number is bigger than number</td> </tr> <tr> <td>orderNumberNumberSmaller={number}</td> <td>Only retrieve all orders of which the order number is smaller than number</td> </tr> <tr> <td>startAmount={amount}</td> <td>Only retrieve all orders of which the (net/gross) sum is larger or equal amount</td> </tr> <tr> <td>endAmount={amount}</td> <td>Only retrieve all orders of which the (net/gross) sum is smaller or equal amount</td> </tr> </table>
+       Often you don't want to retrieve all orders in a sevdesk account or one specific order of which you know the ID, but rather a list of orders or a single order with certain properties.<br> For this purpose we provide a bunch of filters that you can attach to your GET query string for nearly all endpoints.<br> Here are all filters applicable to an order query. <table> <tr> <th>Filter</th> <th>Description</th> </tr> <tr> <td>orderNumber={number}</td> <td>Only retrieve all orders with number as a order number</td> </tr> <tr> <td>tags[x][id]={id}&tags[x][objectName]=Tag</td> <td>Only retrieve all orders with id as a tag.<br> You can specify multiple tags by adding more array entries. </td> </tr> <tr> <td>status={status}</td> <td>Only retrieve orders of a given status</td> </tr> <tr> <td>createBefore={timestamp}</td> <td>Only retrieve all orders created before timestamp</td> </tr> <tr> <td>createAfter={timestamp}</td> <td>Only retrieve all orders created after timestamp</td> </tr> <tr> <td>updateBefore={timestamp}</td> <td>Only retrieve all orders updated last before timestamp</td> </tr> <tr> <td>updateAfter={timestamp}</td> <td>Only retrieve all orders updated last after timestamp</td> </tr> <tr> <td>contact[id]={id}&contact[objectName]=Contact</td> <td>Only retrieve all orders with id as a contact<br> </td> </tr> <tr> <td>startDate={timestamp}</td> <td>Only retrieve all orders where order date is bigger than timestamp</td> </tr> <tr> <td>endDate={timestamp}</td> <td> Only retrieve all orders where order date is smaller than timestamp<br> If startDate and endDate are both supplied, you will get all orders in the defined range </td> </tr> <tr> <td>orderType={type}</td> <td>Only retrieve all orders with type as an order type</td> </tr> <tr> <td>orderByOrderNumber={ASC/DESC}</td> <td>Order all orders after order number in ASC/DESC order</td> </tr> <tr> <td>orderNumberGreater={number}</td> <td>Only retrieve all orders of which the order number is bigger than number</td> </tr> <tr> <td>orderNumberNumberSmaller={number}</td> <td>Only retrieve all orders of which the order number is smaller than number</td> </tr> <tr> <td>startAmount={amount}</td> <td>Only retrieve all orders of which the (net/gross) sum is larger or equal amount</td> </tr> <tr> <td>endAmount={amount}</td> <td>Only retrieve all orders of which the (net/gross) sum is smaller or equal amount</td> </tr> </table>
     x-displayName: Order
   - name: OrderPos
     description: |-
@@ -239,7 +249,7 @@ tags:
        
        An accounting type is the booking account used in voucher positions.<br> It is essential that you always provide one, as it is relevant for multiple business reports.<br> In general, accounting types are differentiated into income and output accounting types.<br> Income types should only be used for debit vouchers and output types only for credit vouchers!<br> Here are two examples how accounting types can be chosen by our customers in the web interface:<br><br> <img src='openAPI/img/creditAccountingTypes.PNG' width= '700px'><br><br> <img src='openAPI/img/debitAccountingType.PNG' width= '700px'><br><br> Regarding the accounting types, you will most certainly only need to request existing accounting types for using their ID in further requests.<br> Therefore, you only need to send normal GET requests to the AccountingType endpoint.<br> 
       # How to filter for certain vouchers
-       <table> <tr> <th>Filter</th> <th>Description</th> </tr> <tr> <td>accountingType[id]={id}&accountingType[objectName]=AccountingType</td> <td>Only retrieve all vouchers which contain at least one position using id as an accounting type.<br> </td> </tr> <tr> <td>withoutCatering=true</td> <td>Retrieve all vouchers except catering vouchers.</td> </tr> <tr> <td>year={year}</td> <td>Only retrieve all vouchers with a voucher date in year.</td> </tr> <tr> <td>month={month}</td> <td>Only retrieve all vouchers with a voucher date in month.<br> Can be combined with a year. </td> </tr> <tr> <td>descriptionLike={description}</td> <td>Only retrieve all vouchers with a description containing description.</td> </tr> <tr> <td>creditDebit={C/D}</td> <td>Supply <b>C</b> to only retrieve credit vouchers and <b>D</b> to only retrieve debit vouchers.</td> </tr> <tr> <td>supplierName={name}</td> <td>Only retrieve all vouchers with a supplier having a name like name.</td> </tr> <tr> <td>commentLike={comment}</td> <td>Only retrieve all vouchers having a position with a comment like comment.</td> </tr> <tr> <td>searchCommentOrDescription={text}</td> <td>Only retrieve all vouchers having a position with comment like text or a description like text.</td> </tr> <tr> <td>contact[id]={id}&contact[objectName]=Contact</td> <td>Only retrieve all vouchers with id as a contact<br> </td> </tr> <tr> <td>createBefore={timestamp}</td> <td>Only retrieve all vouchers created before timestamp</td> </tr> <tr> <td>createAfter={timestamp}</td> <td>Only retrieve all vouchers created after timestamp</td> </tr> <tr> <td>updateBefore={timestamp}</td> <td>Only retrieve all vouchers updated last before timestamp</td> </tr> <tr> <td>updateAfter={timestamp}</td> <td>Only retrieve all vouchers updated last after timestamp</td> </tr> <tr> <td>startDate={timestamp}</td> <td>Only retrieve all vouchers where voucher date is bigger than timestamp</td> </tr> <tr> <td>endDate={timestamp}</td> <td> Only retrieve all vouchers where voucher date is smaller than timestamp<br> If startDate and endDate are both supplied, you will get all vouchers in the defined range. </td> </tr> <tr> <td>object[id]={id}&object[objectName]={objectName}</td> <td>Only retrieve all vouchers with a linked object with ID id and objectName as object name.<br> </td> </tr> <tr> <td>startPayDate={timestamp}</td> <td>Only retrieve all vouchers where pay date is bigger than timestamp</td> </tr> <tr> <td>endPayDate={timestamp}</td> <td> Only retrieve all vouchers where pay date is smaller than timestamp<br> If startPayDate and endPayDate are both supplied, you will get all vouchers in the defined range. </td> </tr> <tr> <td>status={status}</td> <td>Only retrieve vouchers of a given status</td> </tr> <tr> <td>orderByDebit=true</td> <td>Retrieve all vouchers ordered by their debit</td> </tr> <tr> <td>costCentre[id]={id}&costCentre[objectName]=CostCentre</td> <td>Only retrieve all vouchers with id as a cost centre.<br> </td> </tr> <tr> <td>voucherType={type}</td> <td>Only retrieve all vouchers with type as a voucher type</td> </tr> <tr> <td>origin[id]={id}&origin[objectName]=ModelName</td> <td>Only retrieve all vouchers with id as an origin</td> </tr> <tr> <td>globalSearch={searchTerm}</td> <td>Search for vouchers related to searchTerm</td> </tr> <tr> <td>contactOrObject[id]={id}&contactOrObject[objectName]={objectName}</td> <td>Only retrieve all vouchers with a linked object or a contact with ID id and objectName as object name.<br> </td> </tr> <tr> <td>orderByVoucherNumber={ASC/DESC}</td> <td>Order all vouchers after voucher number in ASC/DESC order</td> </tr> <tr> <td>delinquent=true</td> <td>Only retrieve delinquent (due) vouchers</td> </tr> <tr> <td>hasDocument=true</td> <td>Only retrieve vouchers which have an attached document</td> </tr> <tr> <td>noRv=true</td> <td>Only retrieve vouchers which are not of type RV</td> </tr> <tr> <td>tags[x][id]={id}&tags[x][objectName]=Tag</td> <td>Only retrieve all vouchers with id as a tag.<br> You can specify multiple tags by adding more array entries. </td> </tr> <tr> <td>startAmount={amount}</td> <td>Only retrieve all vouchers with a sum bigger than amount.<br> If your provided amount is negative, it will retrieve all vouchers with a sum smaller than amount.</td> </tr> <tr> <td>endAmount={amount}</td> <td> Only retrieve all vouchers with a sum smaller than amount.<br> If your provided amount is negative, it will retrieve all vouchers with a sum bigger than amount.<br> If startAmount and endAmount are both supplied, you will get all vouchers in the defined range. </td> </tr> <tr> <td>fulltextSearch={text}</td> <td>Search for vouchers, positions or contact with text as a text</td> </tr> <tr> <td>fulltextSearchObjects={object1, object2, ...}</td> <td>Enables different objects to search in with the fulltextSearch.</td> </tr> </table><br>
+       <table> <tr> <th>Filter</th> <th>Description</th> </tr> <tr> <td>accountingType[id]={id}&accountingType[objectName]=AccountingType</td> <td>Only retrieve all vouchers which contain at least one position using id as an accounting type.<br> </td> </tr> <tr> <td>withoutCatering=true</td> <td>Retrieve all vouchers except catering vouchers.</td> </tr> <tr> <td>year={year}</td> <td>Only retrieve all vouchers with a voucher date in year.</td> </tr> <tr> <td>month={month}</td> <td>Only retrieve all vouchers with a voucher date in month.<br> Can be combined with a year. </td> </tr> <tr> <td>descriptionLike={description}</td> <td>Only retrieve all vouchers with a description containing description.</td> </tr> <tr> <td>creditDebit={C/D}</td> <td>Supply <b>C</b> to only retrieve credit vouchers and <b>D</b> to only retrieve debit vouchers.</td> </tr> <tr> <td>supplierName={name}</td> <td>Only retrieve all vouchers with a supplier having a name like name.</td> </tr> <tr> <td>commentLike={comment}</td> <td>Only retrieve all vouchers having a position with a comment like comment.</td> </tr> <tr> <td>searchCommentOrDescription={text}</td> <td>Only retrieve all vouchers having a position with comment like text or a description like text.</td> </tr> <tr> <td>contact[id]={id}&contact[objectName]=Contact</td> <td>Only retrieve all vouchers with id as a contact<br> </td> </tr> <tr> <td>createBefore={timestamp}</td> <td>Only retrieve all vouchers created before timestamp</td> </tr> <tr> <td>createAfter={timestamp}</td> <td>Only retrieve all vouchers created after timestamp</td> </tr> <tr> <td>updateBefore={timestamp}</td> <td>Only retrieve all vouchers updated last before timestamp</td> </tr> <tr> <td>updateAfter={timestamp}</td> <td>Only retrieve all vouchers updated last after timestamp</td> </tr> <tr> <td>startDate={timestamp}</td> <td>Only retrieve all vouchers where voucher date is bigger than timestamp</td> </tr> <tr> <td>endDate={timestamp}</td> <td> Only retrieve all vouchers where voucher date is smaller than timestamp<br> If startDate and endDate are both supplied, you will get all vouchers in the defined range. </td> </tr> <tr> <td>object[id]={id}&object[objectName]={objectName}</td> <td>Only retrieve all vouchers with a linked object with ID id and objectName as object name.<br> </td> </tr> <tr> <td>startPayDate={timestamp}</td> <td>Only retrieve all vouchers where pay date is bigger than timestamp</td> </tr> <tr> <td>endPayDate={timestamp}</td> <td> Only retrieve all vouchers where pay date is smaller than timestamp<br> If startPayDate and endPayDate are both supplied, you will get all vouchers in the defined range. </td> </tr> <tr> <td>status={status}</td> <td>Only retrieve vouchers of a given status</td> </tr> <tr> <td>orderByDebit=true</td> <td>Retrieve all vouchers ordered by their debit</td> </tr> <tr> <td>costCentre[id]={id}&costCentre[objectName]=CostCentre</td> <td>Only retrieve all vouchers with id as a cost centre.<br> </td> </tr> <tr> <td>voucherType={type}</td> <td>Only retrieve all vouchers with type as a voucher type</td> </tr> <tr> <td>origin[id]={id}&origin[objectName]=ModelName</td> <td>Only retrieve all vouchers with id as an origin</td> </tr> <tr> <td>contactOrObject[id]={id}&contactOrObject[objectName]={objectName}</td> <td>Only retrieve all vouchers with a linked object or a contact with ID id and objectName as object name.<br> </td> </tr> <tr> <td>orderByVoucherNumber={ASC/DESC}</td> <td>Order all vouchers after voucher number in ASC/DESC order</td> </tr> <tr> <td>delinquent=true</td> <td>Only retrieve delinquent (due) vouchers</td> </tr> <tr> <td>hasDocument=true</td> <td>Only retrieve vouchers which have an attached document</td> </tr> <tr> <td>noRv=true</td> <td>Only retrieve vouchers which are not of type RV</td> </tr> <tr> <td>tags[x][id]={id}&tags[x][objectName]=Tag</td> <td>Only retrieve all vouchers with id as a tag.<br> You can specify multiple tags by adding more array entries. </td> </tr> <tr> <td>startAmount={amount}</td> <td>Only retrieve all vouchers with a sum bigger than amount.<br> If your provided amount is negative, it will retrieve all vouchers with a sum smaller than amount.</td> </tr> <tr> <td>endAmount={amount}</td> <td> Only retrieve all vouchers with a sum smaller than amount.<br> If your provided amount is negative, it will retrieve all vouchers with a sum bigger than amount.<br> If startAmount and endAmount are both supplied, you will get all vouchers in the defined range. </td> </tr> <tr> <td>fulltextSearch={text}</td> <td>Search for vouchers, positions or contact with text as a text</td> </tr> <tr> <td>fulltextSearchObjects={object1, object2, ...}</td> <td>Enables different objects to search in with the fulltextSearch.</td> </tr> </table><br>
     x-displayName: Voucher
   - name: VoucherPos
     description: "Every voucher can contain one or more voucher positions.<br> These positions must contain an accounting type (booking account) so that the voucher can be booked accordingly.<br> In sevdesk the voucher object itself just provides the skeleton to which positions can be added.<br> Without the positions, the voucher would have a sum of zero and therefore no real meaning.<br> For this reason it is necessary that we have a closer look at voucher positions in this section. \n# What makes up a voucher position?\n\n<b>A voucher position item basically consists of in sevdesk-Update 2.0:</b><br> \r\n <ul> <li>An account datev (booking account)</li> <li>A sum (gross or net)</li> <li>A tax rate</li> <li>A voucher to which the position belongs</li> </ul>\n<b>A voucher position item basically consists of in sevdesk-Update 1.0:</b><br><br> \r\n <ul> <li>An accounting type (booking account)</li> <li>A sum (gross or net)</li> <li>A tax rate</li> <li>A voucher to which the position belongs</li> </ul>\nThe total gross sum of the voucher position is then calculated.<br> The 'net' attribute determines how we calculate the total, if net is true we use the sumNet and calculate from there. If net is false we use the sumGross and calculate the other values from there. <br><br>\n\n# Voucher position attributes\n Here is the table of all attributes of voucher positions.<br> Necessary attributes, which must not be left out, are marked red.<br> <table> <tr> <th>Attribute</th> <th>Description</th> <th>Attribute Type</th> </tr> <tr> <td><span style='color:red'>sumGross</span> or <span style='color:red'>sumNet</span></td> <td> The sum of the voucher position. You may provider both values. </td> <td>Double</td> </tr> <tr> <td><span style='color:red'>taxRate</span></td> <td> The tax rate of the voucher position. </td> <td>Double</td> </tr> <tr> <td><span style='color:red'>voucher</span></td> <td> The voucher to which the position belongs. </td> <td>Nested object (Voucher)</td> </tr> <tr> <td>comment</td> <td> A comment describing the position. </td> <td>String</td> </tr> <tr> <td><span style='color:red'>net</span></td> <td> Define if the sum you provided is inclusive (false) or exclusive vat (true).<br> All positions must be either net or gross, a mixture of the two is not possible. </td> <td>Boolean</td> </tr> <tr> <td><span style='color:red'>accountDatev</span></td> <td> <b>Use this in sevdesk-Update 2.0 (replaces accountingType).</b><br> The account datev (booking account) for the voucher position. </td> <td>Nested object (AccountDatev)</td> </tr> <tr> <td><span style='color:red'>accountingType</span></td> <td> The accounting type (booking account) for the voucher position. </td> <td>Nested object (AccountingType)</td> </tr> </table>"
@@ -632,10 +642,14 @@ paths:
       tags:
         - CheckAccountTransaction
       summary: Create a new transaction
-      description: Creates a new transaction on a check account.
+      description: >-
+        Creates a new transaction on a check account. This should only be used
+        with check account type online, preferably for csv import accounts.
       operationId: createTransaction
       requestBody:
-        description: "Creation data. Please be aware, that you need to provide at least all required parameter\r\n    of the CheckAccountTransaction model!"
+        description: >-
+          Creation data. Please note that only status 100 makes sense when
+          creating transactions.
         content:
           application/json:
             schema:
@@ -804,6 +818,98 @@ paths:
                 $ref: '#/components/schemas/validationError'
         '500':
           description: Server Error
+      security:
+        - api_key: []
+  /PrivateTransactionRule:
+    get:
+      tags:
+        - PrivateTransactionRule
+      summary: List existing rules
+      description: >-
+        List all existing rules you defined for automated marking private
+        transactions.
+      operationId: listPrivateTransactionRules
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  objects:
+                    type: array
+                    items:
+                      $ref: >-
+                        #/components/schemas/Model_PrivateTransactionRuleResponse
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication required
+        '500':
+          description: Server error
+      security:
+        - api_key: []
+    post:
+      tags:
+        - PrivateTransactionRule
+      summary: Create a new rule
+      description: Creates a new rule for marking private transactions automatically.
+      operationId: createPrivateTransactionRule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePrivateTransactionRule'
+      responses:
+        '201':
+          description: Created - Returns created rule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model_PrivateTransactionRuleResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication required
+        '422':
+          description: Validation error, you did not submit valid input
+        '500':
+          description: Server error
+      security:
+        - api_key: []
+  /PrivateTransactionRule/{id}:
+    delete:
+      tags:
+        - PrivateTransactionRule
+      summary: Delete the rule by id
+      operationId: deletePrivateTransactionRule
+      parameters:
+        - name: id
+          in: path
+          description: Id of the rule to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation - entity deleted
+          content:
+            application/json:
+              schema:
+                properties:
+                  objects:
+                    type: array
+                    items:
+                      default: null
+                type: object
+        '400':
+          description: Bad request
+        '401':
+          description: Authentication required
+        '409':
+          description: Conflict
+        '500':
+          description: Server error
       security:
         - api_key: []
   /Contact/Factory/getNextCustomerNumber:
@@ -2847,7 +2953,7 @@ paths:
                       example: CheckAccount
                   type: object
                 checkAccountTransaction:
-                  description: "The check account transaction on which should be booked.<br>\r\n    The transaction will be linked to the credit note."
+                  description: "The check account transaction on which should be booked.<br>\r\n    The transaction will be linked to the credit note.<br>When the check account is type online, you must provider a transaction; other types will create the transaction."
                   required:
                     - id
                     - objectName
@@ -3242,14 +3348,14 @@ paths:
     get:
       summary: Start DATEV CSV ZIP export
       description: >-
-        Start an export that generates booking data in the DATEV format (CSV) 
+        Start an export that generates booking data in the DATEV format (CSV)
         Before you can perform the DATEV export, you first have to set the
         "accountingYearBegin". To do this, use the endpoint <a
-        href='#tag/Export/operation/updateExportConfig'>updateExportConfig</a>. 
+        href='#tag/Export/operation/updateExportConfig'>updateExportConfig</a>.
         After that you can use the createDatevCsvZipExportJob endpoint to start
-        the DATEV export which returns the export ID.  You have to use the <a
+        the DATEV export which returns the export ID. You have to use the <a
         href='#tag/Export/operation/jobDownloadInfo'>jobDownloadInfo</a>
-        endpoint to receive the download url when the export is ready. 
+        endpoint to receive the download url when the export is ready.
         <h3>Export workflow</h2> To get the DATEV CSV zip file, please implement
         the following workflow. <ol> <li>Set the accountingYearBegin (if not
         already set) via <a
@@ -3351,14 +3457,14 @@ paths:
     get:
       summary: Start DATEV XML ZIP export
       description: >-
-        Start an export that generates invoice data in the DATEV format (XML) 
+        Start an export that generates invoice data in the DATEV format (XML)
         Before you can perform the DATEV export, you first have to set the
         "accountingYearBegin". To do this, use the endpoint <a
-        href='#tag/Export/operation/updateExportConfig'>updateExportConfig</a>.  
+        href='#tag/Export/operation/updateExportConfig'>updateExportConfig</a>.
         After that you can use the createDatevXmlZipExportJob endpoint to start
-        the DATEV export which returns the export ID.  You have to use the <a
+        the DATEV export which returns the export ID. You have to use the <a
         href='#tag/Export/operation/jobDownloadInfo'>jobDownloadInfo</a>
-        endpoint to receive the download url when the export is ready. 
+        endpoint to receive the download url when the export is ready.
         <h3>Export workflow</h2> To get the DATEV XML zip file, please implement
         the following workflow. <ol> <li>Set the accountingYearBegin (if not
         already set) via <a
@@ -3583,6 +3689,9 @@ paths:
             required:
               - modelName
               - objectName
+            example:
+              sevQuery[objectName]: SevQuery
+              sevQuery[modelName]: Invoice
             properties:
               limit:
                 type: integer
@@ -3699,6 +3808,9 @@ paths:
             required:
               - modelName
               - objectName
+            example:
+              sevQuery[objectName]: SevQuery
+              sevQuery[modelName]: Invoice
             properties:
               limit:
                 type: integer
@@ -3706,6 +3818,7 @@ paths:
                 example: 1000
               modelName:
                 description: Model name, which is 'Invoice'
+                example: Invoice
               objectName:
                 description: Model name, which is 'SevQuery'
                 example: SevQuery
@@ -3816,6 +3929,9 @@ paths:
             required:
               - modelName
               - objectName
+            example:
+              sevQuery[objectName]: SevQuery
+              sevQuery[modelName]: CreditNote
             properties:
               limit:
                 type: integer
@@ -3912,6 +4028,9 @@ paths:
             required:
               - modelName
               - objectName
+            example:
+              sevQuery[objectName]: SevQuery
+              sevQuery[modelName]: Voucher
             properties:
               limit:
                 type: integer
@@ -4014,6 +4133,9 @@ paths:
             required:
               - modelName
               - objectName
+            example:
+              sevQuery[objectName]: SevQuery
+              sevQuery[modelName]: CheckAccountTransaction
             properties:
               limit:
                 type: integer
@@ -4118,6 +4240,9 @@ paths:
             required:
               - modelName
               - objectName
+            example:
+              sevQuery[objectName]: SevQuery
+              sevQuery[modelName]: Voucher
             properties:
               limit:
                 type: integer
@@ -4224,6 +4349,9 @@ paths:
             required:
               - modelName
               - objectName
+            example:
+              sevQuery[objectName]: SevQuery
+              sevQuery[modelName]: Contact
             properties:
               limit:
                 type: integer
@@ -5202,7 +5330,7 @@ paths:
                       example: CheckAccount
                   type: object
                 checkAccountTransaction:
-                  description: "The check account transaction on which should be booked.<br>\r\n    The transaction will be linked to the invoice."
+                  description: "The check account transaction on which should be booked.<br>\r\n    The transaction will be linked to the invoice.<br>When the check account is type online, you must provider a transaction; other types will create the transaction."
                   required:
                     - id
                     - objectName
@@ -6904,7 +7032,7 @@ paths:
                       example: CheckAccount
                   type: object
                 checkAccountTransaction:
-                  description: "The check account transaction on which should be booked.<br>\r\n    The transaction will be linked to the voucher.<br>Providing a transaction is required for online checkaccounts (like you would select an existing transaction in the UI)."
+                  description: "The check account transaction on which should be booked.<br>\r\n    The transaction will be linked to the voucher.<br>Providing a transaction is required for online checkaccounts (like you would select an existing transaction in the UI). You should not provide a transaction for other account types, the transaction will be created automatically."
                   required:
                     - id
                     - objectName
@@ -8083,6 +8211,11 @@ components:
             1200 in SKR03. Must be unique among all your CheckAccounts.
           type: string
           example: '1800'
+        bic:
+          description: The BIC of the bank this account belongs to
+          type: string
+          nullable: true
+          example: BELADEBEXXX
       type: object
     createFileImportAccount:
       title: Data to create a file import account
@@ -8316,28 +8449,6 @@ components:
           description: Name of the check account
           type: string
           example: Iron Bank
-        type:
-          description: "The type of the check account. Account with a CSV or MT940 import are regarded as online.<br>\r\n     Apart from that, created check accounts over the API need to be offline, as online accounts with an active connection\r\n     to a bank application can not be managed over the API."
-          type: string
-          enum:
-            - online
-            - offline
-          example: online
-        importType:
-          description: >-
-            Import type. Transactions can be imported by this method on the
-            check account.
-          type: string
-          enum:
-            - CSV
-            - MT940
-            - null
-          example: CSV
-          nullable: true
-        currency:
-          description: The currency of the check account.
-          type: string
-          example: EUR
         defaultAccount:
           description: Defines if this check account is the default account.
           type: integer
@@ -8345,13 +8456,6 @@ components:
           enum:
             - 0
             - 1
-        status:
-          description: Status of the check account. 0 <-> Archived - 100 <-> Active
-          type: integer
-          default: 100
-          enum:
-            - 0
-            - 100
         autoMapTransactions:
           description: >-
             Defines if transactions on this account are automatically mapped to
@@ -8364,6 +8468,12 @@ components:
             The booking account used for this bank account, e.g. 1800 in SKR04
             and 1200 in SKR03. Must be unique among all your CheckAccounts.
             Ignore to use a sensible default.
+          type: string
+        iban:
+          description: IBAN of a bank account
+          type: string
+        bic:
+          description: BIC of the related bank
           type: string
       type: object
     Model_CheckAccountTransactionResponse:
@@ -8761,6 +8871,65 @@ components:
               description: >-
                 An identifier of this exact problem that can be given to the
                 support team.
+    Model_PrivateTransactionRuleResponse:
+      title: PrivateTransactionRule model, response format
+      description: A rule defining which transactions to mark as private automatically.
+      type: object
+      properties:
+        id:
+          description: The entity id
+          type: string
+          example: '1'
+        objectName:
+          description: The entity object name, PrivateTransactionRule
+          type: string
+          example: PrivateTransactionRule
+        create:
+          description: Date of entity creation
+          type: string
+          format: date-time
+          example: '2026-01-16T12:51:22+01:00'
+        update:
+          description: Date of last entity update
+          type: string
+          format: date-time
+          example: '2026-01-16T12:51:22+01:00'
+        sevClient:
+          description: Client to which the entity belongs.
+          properties:
+            id:
+              description: Unique identifier of the client
+              type: string
+              example: '0'
+            objectName:
+              description: Model name, which is 'SevClient'
+              type: string
+          type: object
+        paymentPurpose:
+          description: The payment purpose of transactions to match
+          type: string
+          nullable: true
+        counterpartName:
+          description: The counterpart name of transactions to match
+          type: string
+          nullable: true
+    CreatePrivateTransactionRule:
+      title: Request body to create a PrivateTransactionRule
+      type: object
+      required:
+        - objectName
+      properties:
+        objectName:
+          type: string
+          description: PrivateTransactionRule
+        paymentPurpose:
+          description: The purpose of transactions that you want to match
+          type: string
+          nullable: true
+        counterpartName:
+          description: The counterpart name of transactions that you want to match
+          type: string
+          nullable: true
     Model_ContactResponse:
       title: Contact model
       description: Contact model
@@ -11883,7 +12052,7 @@ components:
           description: Download url of the export file
           type: string
           example: >-
-            https://sevexport-filestorage-workload-prod.s3.eu-central-1.amazonaws.com/542277/0a0e1eff-9590-1bea-1195-a3cfc04364cc/zip/BITTE-ENTPACKEN_Buchungsstapel_und_Belegbilder_123456_66666_20250201_bis_20250228.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250317T111422Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAEXAMPLEKEYID12345%2F20250317%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Expires=604800&X-Amz-Signature=35854d4cd746fca8eb9f7624960ea5b207f24ffd2c9bb14361440c70f05998d2
+            https://sevexport-filestorage-workload-prod.s3.eu-central-1.amazonaws.com/542277/0a0e1eff-9590-1bea-1195-a3cfc04364cc/zip/BITTE-ENTPACKEN_Buchungsstapel_und_Belegbilder_123456_66666_20250201_bis_20250228.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250317T111422Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAIIODRVFBPEMLYBCQ%2F20250317%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Expires=604800&X-Amz-Signature=35854d4cd746fca8eb9f7624960ea5b207f24ffd2c9bb14361440c70f05998d2
         linkExpireDate:
           description: Expire date of the download url
           type: string
@@ -16970,6 +17139,7 @@ x-tagGroups:
       - Basics
       - CheckAccount
       - CheckAccountTransaction
+      - PrivateTransactionRule
       - AccountingContact
       - CommunicationWay
       - ContactAddress

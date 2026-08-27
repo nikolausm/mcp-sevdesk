@@ -5,6 +5,7 @@ Ein MCP (Model Context Protocol) Server für die sevdesk API. Ermöglicht die In
 ## Features
 
 - **Kontakte**: Erstellen, lesen, aktualisieren und löschen von Kontakten (Kunden, Lieferanten, Partner)
+- **Adressen**: Anlegen, lesen, aktualisieren und löschen von Kontaktadressen (Rechnungs-, Liefer-, Abholanschrift)
 - **Rechnungen**: Auflisten, abrufen, als PDF exportieren, per E-Mail versenden, buchen und stornieren
 - **Belege (Voucher)**: Verwalten von Eingangsrechnungen und Ausgaben
 - **Bankkonten**: Verwalten von Bankkonten und Transaktionen
@@ -65,6 +66,21 @@ SEVDESK_API_TOKEN="dein-token" npm start
 | `create_contact` | Neuen Kontakt erstellen |
 | `update_contact` | Kontakt aktualisieren |
 | `delete_contact` | Kontakt löschen |
+
+### Adressen
+
+| Tool | Beschreibung |
+|------|-------------|
+| `list_contact_addresses` | Adressen auflisten (optional gefiltert nach `contactId`) |
+| `get_contact_address` | Einzelne Adresse abrufen |
+| `create_contact_address` | Neue Adresse zu einem Kontakt anlegen |
+| `update_contact_address` | Adresse aktualisieren (nur übergebene Felder) |
+| `delete_contact_address` | Adresse löschen |
+| `list_countries` | Länder auflisten (liefert `countryId`) |
+| `list_address_categories` | Adress-Kategorien auflisten (liefert `categoryId`) |
+
+Beim Anlegen einer Adresse sind `contactId`, `countryId` und `categoryId` Pflicht.
+Gängige Kategorien: `47` = Rechnungsanschrift, `48` = Lieferanschrift, `49` = Abholanschrift.
 
 ### Rechnungen
 
