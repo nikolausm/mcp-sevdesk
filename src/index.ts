@@ -96,7 +96,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     if (error instanceof z.ZodError) {
       throw new McpError(
         ErrorCode.InvalidParams,
-        `Invalid parameters: ${error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ")}`
+        `Invalid parameters: ${error.issues.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ")}`
       );
     }
 
@@ -142,10 +142,10 @@ function zodToJsonSchema(schema: z.ZodType): object {
   return jsonSchema;
 }
 
-function zodTypeToJsonSchema(zodType: z.ZodType): object {
+function zodTypeToJsonSchema(zodType: unknown): object {
   // Handle optional types
   if (zodType instanceof z.ZodOptional) {
-    return zodTypeToJsonSchema(zodType._def.innerType);
+    return zodTypeToJsonSchema(zodType.unwrap());
   }
 
   // Handle string
@@ -179,7 +179,7 @@ function zodTypeToJsonSchema(zodType: z.ZodType): object {
   if (zodType instanceof z.ZodEnum) {
     const schema: Record<string, any> = {
       type: "string",
-      enum: zodType._def.values,
+      enum: zodType.options,
     };
     if (zodType.description) {
       schema.description = zodType.description;
@@ -191,7 +191,7 @@ function zodTypeToJsonSchema(zodType: z.ZodType): object {
   if (zodType instanceof z.ZodArray) {
     const schema: Record<string, any> = {
       type: "array",
-      items: zodTypeToJsonSchema(zodType._def.type),
+      items: zodTypeToJsonSchema(zodType.element),
     };
     if (zodType.description) {
       schema.description = zodType.description;

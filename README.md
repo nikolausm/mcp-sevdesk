@@ -113,6 +113,12 @@ SEVDESK_API_TOKEN="dein-token" npm start
 
 Dieser Server basiert auf der offiziellen sevdesk API v1. Weitere Informationen zur API findest du in der [sevdesk API-Dokumentation](https://api.sevdesk.de/).
 
+## Offline-Prüfungen
+
+Nach `npm ci --ignore-scripts` und `npm run generate-types` führt `npm run test:offline` Build und MCP-Protokolltests aus. Alle 34 Tools werden mit synthetischem Token und abgefangenem HTTP geprüft, einschließlich Schreibaktionen, ungültigen Eingaben und API-Fehlern. Es werden keine echten Kontakte, Rechnungen oder Buchungen verändert und keine E-Mails versandt.
+
+CI prüft dies unter Node 22 und 24 sowie mit `npm audit --audit-level=moderate`. `npm test` bleibt die bestehende Integrationstestsuite; ihre Tests werden ohne `SEVDESK_API_TOKEN` übersprungen und ersetzen keine Offline-Prüfung.
+
 ## Lizenz
 
 MIT
