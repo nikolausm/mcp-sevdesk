@@ -91,3 +91,29 @@ describe("Vouchers API (lesend)", () => {
     });
   });
 });
+
+describe("upload_voucher_file (Eingabevalidierung)", () => {
+  const schema = voucherTools.upload_voucher_file.inputSchema;
+
+  it("sollte filePath ohne base64Content akzeptieren", () => {
+    expect(schema.safeParse({ filePath: "/tmp/beleg.pdf" }).success).toBe(true);
+  });
+
+  it("sollte beide oder keine Quelle ablehnen", () => {
+    expect(schema.safeParse({}).success).toBe(false);
+    expect(
+      schema.safeParse({ filePath: "/tmp/beleg.pdf", base64Content: "AAAA" }).success
+    ).toBe(false);
+  });
+
+  it("sollte zu großen base64Content mit Hinweis auf filePath ablehnen", async () => {
+    const oversized = "A".repeat(300 * 1024);
+
+    await expect(
+      voucherTools.upload_voucher_file.handler({} as SevdeskClient, {
+        base64Content: oversized,
+        fileName: "beleg.pdf",
+      })
+    ).rejects.toThrow(/filePath/);
+  });
+});

@@ -1,6 +1,14 @@
 export { contactTools } from "./contacts.js";
+export { addressTools } from "./addresses.js";
 export { invoiceTools } from "./invoices.js";
 export { voucherTools } from "./vouchers.js";
 export { accountTools } from "./accounts.js";
 export { partTools } from "./parts.js";
 export { tagTools } from "./tags.js";
+export { communicationTools } from "./communication.js";
+export { invoiceDraftTools } from "./invoice-drafts.js";
+export { orderTools } from "./orders.js";
+export { creditNoteTools } from "./creditnotes.js";
+export { exportTools } from "./exports.js";
+export { reportTools } from "./reports.js";
+export { bookkeepingTools } from "./bookkeeping.js";
