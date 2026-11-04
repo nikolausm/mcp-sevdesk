@@ -19,6 +19,13 @@ import {
   accountTools,
   partTools,
   tagTools,
+  communicationTools,
+  invoiceDraftTools,
+  orderTools,
+  creditNoteTools,
+  exportTools,
+  reportTools,
+  bookkeepingTools,
 } from "./tools/index.js";
 
 // Combine all tools
@@ -30,6 +37,13 @@ const allTools = {
   ...accountTools,
   ...partTools,
   ...tagTools,
+  ...communicationTools,
+  ...invoiceDraftTools,
+  ...orderTools,
+  ...creditNoteTools,
+  ...exportTools,
+  ...reportTools,
+  ...bookkeepingTools,
 };
 
 type ToolName = keyof typeof allTools;
