@@ -152,7 +152,11 @@ export const invoiceTools = {
       invoiceId: z.number().describe("The ID of the invoice to book"),
       amount: z.number().describe("Amount to book"),
       date: z.string().describe("Booking date (Unix timestamp)"),
-      type: z.enum(["N", "CB", "CF", "O", "OF", "MF", "C"]).describe("Booking type: N=Normal, CB=Cash discount, etc."),
+      type: z
+        .enum(["FULL_PAYMENT", "N", "CB", "CF", "O", "OF", "MTC"])
+        .describe(
+          "Booking type: FULL_PAYMENT=normal full booking, N=partial booking, CB=reduced by discount (Skonto), CF=currency fluctuation (deprecated), O=reduced/higher for other reasons, OF=higher due to reminder charges, MTC=reduced by monetary traffic costs"
+        ),
       checkAccountId: z.number().describe("ID of the check account"),
       checkAccountTransactionId: z.number().optional().describe("ID of an existing transaction to link"),
       createFeed: z.boolean().optional().describe("Create a feed entry"),
@@ -161,7 +165,7 @@ export const invoiceTools = {
       invoiceId: number;
       amount: number;
       date: string;
-      type: "N" | "CB" | "CF" | "O" | "OF" | "MF" | "C";
+      type: "FULL_PAYMENT" | "N" | "CB" | "CF" | "O" | "OF" | "MTC";
       checkAccountId: number;
       checkAccountTransactionId?: number;
       createFeed?: boolean;
