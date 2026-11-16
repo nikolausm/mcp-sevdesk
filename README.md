@@ -4,7 +4,7 @@ Ein MCP (Model Context Protocol) Server für die sevdesk API. Ermöglicht die In
 
 ## Features
 
-- **Kontakte**: Erstellen, lesen, aktualisieren und löschen von Kontakten (Kunden, Lieferanten, Partner)
+- **Kontakte**: Erstellen, lesen, aktualisieren und löschen von Kontakten (Kunden, Lieferanten, Partner), inklusive Adressen, Kommunikationswegen und Ansprechpartnern
 - **Rechnungen**: Auflisten, abrufen, als PDF exportieren, per E-Mail versenden, buchen und stornieren
 - **Belege (Voucher)**: Verwalten von Eingangsrechnungen und Ausgaben
 - **Bankkonten**: Verwalten von Bankkonten und Transaktionen
@@ -65,6 +65,14 @@ SEVDESK_API_TOKEN="dein-token" npm start
 | `create_contact` | Neuen Kontakt erstellen |
 | `update_contact` | Kontakt aktualisieren |
 | `delete_contact` | Kontakt löschen |
+| `list_contact_addresses` | Adressen eines Kontakts auflisten |
+| `create_contact_address` | Adresse zu einem Kontakt anlegen |
+| `update_contact_address` | Adresse aktualisieren |
+| `list_communication_ways` | E-Mail, Telefon, Mobil und Website eines Kontakts auflisten |
+| `create_communication_way` | E-Mail, Telefon, Mobil oder Website zu einem Kontakt anlegen |
+| `update_communication_way` | Kommunikationsweg aktualisieren |
+
+Ansprechpartner werden über `parentId` in `create_contact` bzw. `update_contact` einer Firma zugeordnet.
 
 ### Rechnungen
 
@@ -115,7 +123,7 @@ Dieser Server basiert auf der offiziellen sevdesk API v1. Weitere Informationen 
 
 ## Offline-Prüfungen
 
-Nach `npm ci --ignore-scripts` und `npm run generate-types` führt `npm run test:offline` Build und MCP-Protokolltests aus. Alle 34 Tools werden mit synthetischem Token und abgefangenem HTTP geprüft, einschließlich Schreibaktionen, ungültigen Eingaben und API-Fehlern. Es werden keine echten Kontakte, Rechnungen oder Buchungen verändert und keine E-Mails versandt.
+Nach `npm ci --ignore-scripts` und `npm run generate-types` führt `npm run test:offline` Build und MCP-Protokolltests aus. Alle 40 Tools werden mit synthetischem Token und abgefangenem HTTP geprüft, einschließlich Schreibaktionen, ungültigen Eingaben und API-Fehlern. Es werden keine echten Kontakte, Rechnungen oder Buchungen verändert und keine E-Mails versandt.
 
 CI prüft dies unter Node 22 und 24 sowie mit `npm audit --audit-level=moderate`. `npm test` bleibt die bestehende Integrationstestsuite; ihre Tests werden ohne `SEVDESK_API_TOKEN` übersprungen und ersetzen keine Offline-Prüfung.
 
