@@ -17,9 +17,15 @@ const booking = { amount: 10, date: '1700000000', type: 'N', checkAccountId: 1 }
 const cases = [
   ['list_contacts', { name: 'Fixture', limit: 5 }, 'GET', '/Contact'],
   ['get_contact', { contactId: 1 }, 'GET', '/Contact/1'],
-  ['create_contact', { name: 'Fixture', categoryId: 3 }, 'POST', '/Contact'],
-  ['update_contact', { contactId: 1, name: 'Updated' }, 'PUT', '/Contact/1'],
+  ['create_contact', { surename: 'Fix', familyname: 'Ture', categoryId: 3, parentId: 7 }, 'POST', '/Contact'],
+  ['update_contact', { contactId: 1, name: 'Updated', parentId: 7 }, 'PUT', '/Contact/1'],
   ['delete_contact', { contactId: 1 }, 'DELETE', '/Contact/1'],
+  ['list_contact_addresses', { contactId: 1 }, 'GET', '/ContactAddress'],
+  ['create_contact_address', { contactId: 1, street: 'Fixture 1', zip: '12345', city: 'Fixture' }, 'POST', '/ContactAddress'],
+  ['update_contact_address', { contactAddressId: 1, city: 'Updated' }, 'PUT', '/ContactAddress/1'],
+  ['list_communication_ways', { contactId: 1, type: 'EMAIL' }, 'GET', '/CommunicationWay'],
+  ['create_communication_way', { contactId: 1, type: 'EMAIL', value: 'fixture@example.invalid', main: true }, 'POST', '/CommunicationWay'],
+  ['update_communication_way', { communicationWayId: 1, value: 'updated@example.invalid' }, 'PUT', '/CommunicationWay/1'],
   ['list_invoices', { status: '200' }, 'GET', '/Invoice'],
   ['get_invoice', { invoiceId: 1 }, 'GET', '/Invoice/1'],
   ['get_invoice_pdf', { invoiceId: 1, preventSendBy: true }, 'GET', '/Invoice/1/getPdf'],
@@ -51,7 +57,7 @@ const cases = [
   ['list_tag_relations', {}, 'GET', '/TagRelation'],
 ];
 
-test('all 34 tools preserve discovery and authenticated HTTP dispatch after the Zod update', async t => {
+test('all 40 tools preserve discovery and authenticated HTTP dispatch after the Zod update', async t => {
   const client = await connect(t);
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map(x => x.name).sort(), cases.map(x => x[0]).sort());
@@ -68,6 +74,14 @@ test('all 34 tools preserve discovery and authenticated HTTP dispatch after the 
     assert.equal(result.method, method, name);
     assert.equal(result.path, path, name);
     if (name === 'create_contact') assert.deepEqual(result.body.category, { id: 3, objectName: 'Category' });
+    if (name === 'create_contact') assert.deepEqual(result.body.parent, { id: 7, objectName: 'Contact' });
+    if (name === 'update_contact') assert.deepEqual(result.body, { name: 'Updated', parent: { id: 7, objectName: 'Contact' } });
+    if (name === 'list_contact_addresses') assert.deepEqual(result.query, { 'contact[id]': '1', 'contact[objectName]': 'Contact' });
+    if (name === 'list_communication_ways') assert.deepEqual(result.query, { 'contact[id]': '1', 'contact[objectName]': 'Contact', type: 'EMAIL' });
+    if (name === 'create_contact_address') assert.deepEqual(result.body, { contact: { id: 1, objectName: 'Contact' }, street: 'Fixture 1', zip: '12345', city: 'Fixture', country: { id: 1, objectName: 'StaticCountry' }, category: { id: 47, objectName: 'Category' } });
+    if (name === 'update_contact_address') assert.deepEqual(result.body, { city: 'Updated' });
+    if (name === 'create_communication_way') assert.deepEqual(result.body, { contact: { id: 1, objectName: 'Contact' }, type: 'EMAIL', value: args.value, key: { id: 2, objectName: 'CommunicationWayKey' }, main: true });
+    if (name === 'update_communication_way') assert.deepEqual(result.body, { value: args.value });
     if (name === 'book_invoice' || name === 'book_voucher') {
       assert.equal(result.body.amount, 10);
       assert.deepEqual(result.body.checkAccount, { id: 1, objectName: 'CheckAccount' });
@@ -86,6 +100,7 @@ test('invalid inputs and enum values fail before HTTP with structured parameter 
   for (const [name, args] of [
     ['get_contact', { contactId: 'wrong' }],
     ['create_contact', {}],
+    ['create_communication_way', { contactId: 1, type: 'FAX', value: '1' }],
     ['list_invoices', { status: 'invalid' }],
     ['create_tag', { name: 'Fixture', objectId: 1, objectName: 'Invalid' }],
     ['book_invoice', { invoiceId: 1, ...booking, amount: 'wrong' }],
